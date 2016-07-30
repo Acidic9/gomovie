@@ -17,7 +17,10 @@ func GetEmbedURL(title string) (string, error) {
 	}
 
 	for _, url := range sites {
-		splittedDomain := strings.Split(url, `/`)
+		splittedDomain := strings.Split(url, `//`)
+		if len(splittedDomain) > 1 {
+			splittedDomain = strings.Split(splittedDomain[1], `/`)
+		}
 		fmt.Println(splittedDomain)
 		splittedDomain = strings.Split(splittedDomain[0], `.`)
 		fmt.Println(splittedDomain)
