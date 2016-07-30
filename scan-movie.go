@@ -85,14 +85,8 @@ func PutlockerIs(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	split := strings.Split(strings.ToLower(string(body)), `<td><div class="video">`)
-	if len(split) < 2 {
-		return "", errors.New("Something went wrong")
-	}
 
-	fmt.Println(split)
-
-	embedURL, err := StringBetween(split[1], `type="text/javascript">document.write(doit('`, `'));`)
+	embedURL, err := StringBetween(string(body), `<div class="video"><script type="text/javascript">document.write(doit('`, `'));`)
 	if err != nil {
 		return "", err
 	}
