@@ -134,5 +134,5 @@ func StringBetween(str, start, end string) (string, error) {
 		return "", errors.New("String does not include start/end as substring.")
 	}
 	str = str[len(start):]
-	return str[:strings.Index(str, end)], nil
+	return str[len(start):strings.Index(str, end)], nil
 }
