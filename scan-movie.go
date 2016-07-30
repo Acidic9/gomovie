@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"errors"
 	"log"
+	"fmt"
 )
 
 func GetEmbedURL(title string) (string, error) {
@@ -17,7 +18,9 @@ func GetEmbedURL(title string) (string, error) {
 
 	for _, url := range sites {
 		splittedDomain := strings.Split(url, `/`)
+		fmt.Println(splittedDomain)
 		splittedDomain = strings.Split(splittedDomain[0], `.`)
+		fmt.Println(splittedDomain)
 		if len(splittedDomain) < 2 {
 			log.Println("Domain error", splittedDomain)
 			return "", errors.New("Domain error")
@@ -31,10 +34,10 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			return embedURL, nil
-		case "putlocker.io":
-			embedURL, err := PutlockerIs(url)
+		case "putlockerr.io":
+			embedURL, err := PutlockerrIo(url)
 			if err != nil {
-				log.Println("putlocker.io:", err)
+				log.Println("putlockerr.io:", err)
 				continue
 			}
 			return embedURL, nil
@@ -82,7 +85,7 @@ func PutlockerIs(url string) (string, error) {
 
 // PutlockerIo returns the url of the embedded video in
 // the url provided.
-func PutlockerIo(url string) (string, error) {
+func PutlockerrIo(url string) (string, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
