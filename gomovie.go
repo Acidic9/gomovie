@@ -18,7 +18,7 @@ func Decrypt(str string) string {
 		reversegetFChars[char] = i
 	}
 
-	return doit(`UEdsbWNtRnRaU0J6Y21NOUltaDBkSEE2THk5MGFHVjJhV1JsYjNNdWRIWXZaVzFpWldRdFpqWjZaVEZ4YW1KME0zRnlMVGN5T0hnME1UQXVhSFJ0YkNJZ2QyVmlhMmwwUVd4c2IzZEdkV3hzVTJOeVpXVnVQU0owY25WbElpQnRiM3BoYkd4dmQyWjFiR3h6WTNKbFpXNDlJblJ5ZFdVaUlHRnNiRzkzWm5Wc2JITmpjbVZsYmowaWRISjFaU0lnWm5KaGJXVmliM0prWlhJOUlqQWlJRzFoY21kcGJuZHBaSFJvUFNJd0lpQnRZWEpuYVc1b1pXbG5hSFE5SWpBaUlITmpjbTlzYkdsdVp6MGlibThpSUhkcFpIUm9QU0kzTWpnaUlHaGxhV2RvZEQwaU5ERXdJajQ4TDJsbWNtRnRaVDQ9`)
+	return doit(str)
 }
 
 func ntos(e int) string {
