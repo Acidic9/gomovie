@@ -133,6 +133,6 @@ func StringBetween(str, start, end string) (string, error) {
 	if strings.Index(str, start) == -1 || strings.Index(str, end) == -1 {
 		return "", errors.New("String does not include start/end as substring.")
 	}
-	str = str[len(start):]
-	return str[len(start):strings.Index(str, end)], nil
+	str = str[len(start)+strings.Index(str, start):]
+	return str[:strings.Index(str, end)], nil
 }
