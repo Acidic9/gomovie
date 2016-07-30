@@ -35,7 +35,7 @@ func GetCode(title string) (string, error) {
 		return "", errors.New("Error Occured")
 	}
 
-	code, err := StringBetween(split[1], `document.write(doit('`, `'));`)
+	code, err := StringBetween(split[1], `type="text/javascript">document.write(doit('`, `'));`)
 	if err != nil {
 		return "", err
 	}
