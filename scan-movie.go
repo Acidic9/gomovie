@@ -6,43 +6,88 @@ import (
 	"io/ioutil"
 	"net/url"
 	"errors"
-	"fmt"
+	"log"
 )
 
-func GetCode(title string) (string, error) {
-	sites, err := googleSearch("Watch " + title + " Putlocker")
+func GetEmbedURL(title string) (string, error) {
+	sites, err := googleSearch("Watch " + title + " Online")
 	if err != nil {
 		return "", err
 	}
 
-	resp, err := http.Get(sites[0])
+	for _, url := range sites {
+		domain := strings.Split(url, `/`)
+		domain = strings.Split(domain[0], `.`)
+		domain = domain[len(domain-2)] + "." + domain[len(domain-1)]
+		switch strings.ToLower(domain) {
+		case "putlocker.is":
+			embedURL, err := PutlockerIs(url)
+			if err != nil {
+				log.Println("putlocker.is:", err)
+				continue
+			}
+			return embedURL, nil
+		case "putlocker.io":
+			embedURL, err := PutlockerIs(url)
+			if err != nil {
+				log.Println("putlocker.io:", err)
+				continue
+			}
+			return embedURL, nil
+		}
+	}
+
+	return "", errors.New("Unable to find movie")
+}
+
+// PutlockerIs returns the url of the embedded video in
+// the url provided.
+func PutlockerIs(url string) (string, error) {
+	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
 	}
-
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
-
-	err = ioutil.WriteFile("site.html", body, 0644)
-	if err != nil {
-		return "", err
-	}
-
 	split := strings.Split(string(body), `<td><div class="video">`)
 	if len(split) < 2 {
-		return "", errors.New("Error Occured")
+		return "", errors.New("Something went wrong")
 	}
-
-	code, err := StringBetween(split[1], `type="text/javascript">document.write(doit('`, `'));`)
+	embedURL, err := StringBetween(split[1], `type="text/javascript">document.write(doit('`, `'));`)
 	if err != nil {
 		return "", err
 	}
+	return DecryptPutlocker(embedURL), nil
+}
 
-	fmt.Println(code)
+// PutlockerHDCo returns the url of the embedded video in
+// the url provided.
+/*func PutlockerHDCo(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return StringBetween(string(body), `<IFRAME SRC="`, `"`)
+}*/
 
-	return Decrypt(code), nil
+// PutlockerIo returns the url of the embedded video in
+// the url provided.
+func PutlockerIo(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return StringBetween(string(body), `<IFRAME SRC="`, `"`)
 }
 
 // googleSearch searches a query to google.com and returns all
