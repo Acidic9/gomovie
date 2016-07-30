@@ -90,7 +90,7 @@ func isPutlockerOnline(url string) (bool, error) {
 		return false, err
 	}
 
-	str, err := stringBetween(string(body), `<title>`, `</title>`)
+	str, err := StringBetween(string(body), `<title>`, `</title>`)
 	if err != nil {
 		return false, err
 	}
