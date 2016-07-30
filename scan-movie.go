@@ -30,8 +30,12 @@ func GetCode(title string) (string, error) {
 		return "", err
 	}
 
-	code, err := StringBetween(string(body), `<div class="video">
-<script type="text/javascript">document.write(doit('`, `'));`)
+	split := strings.Split(string(body), `<td><div class="video">`)
+	if len(split) < 2 {
+		return "", errors.New("Error Occured")
+	}
+
+	code, err := StringBetween(split[1], `document.write(doit('`, `'));`)
 	if err != nil {
 		return "", err
 	}
