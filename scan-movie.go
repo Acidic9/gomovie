@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/url"
 	"errors"
+	"fmt"
 )
 
 func GetCode(title string) (string, error) {
@@ -34,6 +35,8 @@ func GetCode(title string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	fmt.Println(code)
 
 	return Decrypt(code), nil
 }
