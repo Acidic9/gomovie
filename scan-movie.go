@@ -16,13 +16,13 @@ func GetEmbedURL(title string) (string, error) {
 	}
 
 	for _, url := range sites {
-		domain := strings.Split(url, `/`)
-		splittedDomain := strings.Split(domain[0], `.`)
+		splittedDomain := strings.Split(url, `/`)
+		splittedDomain = strings.Split(splittedDomain[0], `.`)
 		if len(splittedDomain) < 2 {
 			log.Println("Domain error", splittedDomain)
 			return "", errors.New("Domain error")
 		}
-		domain = splittedDomain[len(splittedDomain)-2] + `.` + splittedDomain[len(splittedDomain)-1]
+		domain := splittedDomain[len(splittedDomain)-2] + `.` + splittedDomain[len(splittedDomain)-1]
 		switch strings.ToLower(domain) {
 		case "putlocker.is":
 			embedURL, err := PutlockerIs(url)
