@@ -11,7 +11,6 @@ function ntos(e) {
 	if (e.length == 1)
 		e = "0" + e;
 	e = "%" + e;
-	console.log(unescape(e));
 	return unescape(e)
 }
 function readReversegetF() {
@@ -86,4 +85,4 @@ function doit(e) {
 }
 
 
-console.log(doit('UEdFZ2NtVnNQU0p1YjJadmJHeHZkeUlnYUhKbFpqMGlhSFIwY0RvdkwzQjFkR3h2WTJ0bGNpNXBjeTlvWkhacFpITXZhR1J6ZEhKbFlXMHVjR2h3UDIxdmRtbGxQVlJvWlNCT2RXMWlaWElnTWpNZ0tESXdNRGNwSWlCMGFYUnNaVDBpVjJGMFkyZ2dWR2hsSUU1MWJXSmxjaUF5TXlBb01qQXdOeWtnYVc0Z1NFUWlJSE4wZVd4bFBTSmpiMnh2Y2pvalptWm1abVptT3lJZ1kyeGhjM005SW0xdmRtZHlJaTgrVUV4QldTQk9UMWM4TDJFKw=='));
+console.log(doit('UEdsbWNtRnRaU0J6Y21NOUltaDBkSEE2THk5MGFHVjJhV1JsYjNNdWRIWXZaVzFpWldRdGRqTTJkMjloWkRneGJUUmlMVGN5T0hnME1UQXVhSFJ0YkNJZ2QyVmlhMmwwUVd4c2IzZEdkV3hzVTJOeVpXVnVQU0owY25WbElpQnRiM3BoYkd4dmQyWjFiR3h6WTNKbFpXNDlJblJ5ZFdVaUlHRnNiRzkzWm5Wc2JITmpjbVZsYmowaWRISjFaU0lnWm5KaGJXVmliM0prWlhJOUlqQWlJRzFoY21kcGJuZHBaSFJvUFNJd0lpQnRZWEpuYVc1b1pXbG5hSFE5SWpBaUlITmpjbTlzYkdsdVp6MGlibThpSUhkcFpIUm9QU0kzTWpnaUlHaGxhV2RvZEQwaU5ERXdJajQ4TDJsbWNtRnRaVDQ9'));

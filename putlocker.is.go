@@ -1,7 +1,6 @@
 package gomovie
 
 import (
-	"html"
 	"fmt"
 	"encoding/hex"
 )
@@ -26,8 +25,7 @@ func ntos(e int) string {
 	if len(h) == 1 {
 		h = "0" + h
 	}
-	byte, _ := hex.DecodeString(h)
-	return string(byte)
+	return unescape(h)
 }
 
 func readReversegetF() int {
@@ -85,5 +83,10 @@ func getF(e string) string {
 }
 
 func doit(e string) string {
-	return html.UnescapeString(getF(getF(e)))
+	return getF(getF(e))
+}
+
+func unescape(hexi string) string {
+	byte, _ := hex.DecodeString(hexi)
+	return string(byte)
 }
