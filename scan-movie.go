@@ -21,6 +21,23 @@ func GetEmbedURL(title string) (string, error) {
 		if len(splittedDomain) > 1 {
 			splittedDomain = strings.Split(splittedDomain[1], `/`)
 		}
+		splittedDomain = strings.Split(splittedDomain[0], `.`)
+		domain := splittedDomain[len(splittedDomain)-2] + `.` + splittedDomain[len(splittedDomain)-1]
+		if strings.ToLower(domain) == "watchfree.to" {
+			embedURL, err := WatchfreeTo(url)
+			if err != nil {
+				log.Println("watchfree.to:", err)
+				continue
+			}
+			return embedURL, nil
+		}
+	}
+
+	for _, url := range sites {
+		splittedDomain := strings.Split(url, `//`)
+		if len(splittedDomain) > 1 {
+			splittedDomain = strings.Split(splittedDomain[1], `/`)
+		}
 		fmt.Println(splittedDomain)
 		splittedDomain = strings.Split(splittedDomain[0], `.`)
 		fmt.Println(splittedDomain)
@@ -61,7 +78,7 @@ func PutlockerIs(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	split := strings.Split(string(body), `<td><div class="video">`)
+	split := strings.Split(strings.ToLower(string(body)), `<td><div class="video">`)
 	if len(split) < 2 {
 		return "", errors.New("Something went wrong")
 	}
@@ -72,9 +89,9 @@ func PutlockerIs(url string) (string, error) {
 	return DecryptPutlocker(embedURL), nil
 }
 
-// PutlockerHDCo returns the url of the embedded video in
+// PutlockerhdCo returns the url of the embedded video in
 // the url provided.
-/*func PutlockerHDCo(url string) (string, error) {
+/*func PutlockerhdCo(url string) (string, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
@@ -97,7 +114,21 @@ func PutlockerrIo(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return StringBetween(string(body), `<IFRAME SRC="`, `"`)
+	return StringBetween(strings.ToLower(string(body)), `<iframe src="`, `"`)
+}
+
+// WatchfreeTo returns the url of the embedded video in
+// the url provided.
+func WatchfreeTo(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return StringBetween(strings.ToLower(string(body)), `var locations = ["`, `"`)
 }
 
 // googleSearch searches a query to google.com and returns all
