@@ -29,7 +29,7 @@ func GetCode(title string) (string, error) {
 		return "", err
 	}
 
-	code, err := stringBetween(string(body), `<div class="video">
+	code, err := StringBetween(string(body), `<div class="video">
 <script type="text/javascript">document.write(doit('`, `'));`)
 	if err != nil {
 		return "", err
@@ -122,7 +122,7 @@ func urlIsPutlocker(url string) bool {
 // stringBetween returns a substring located between the first occurrence of
 // both the provided start and end strings. An error will be returned if
 // str does not include both start and end as a substring.
-func stringBetween(str, start, end string) (string, error) {
+func StringBetween(str, start, end string) (string, error) {
 	if strings.Index(str, start) == -1 || strings.Index(str, end) == -1 {
 		return "", errors.New("String does not include start/end as substring.")
 	}
