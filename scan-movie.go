@@ -61,6 +61,13 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			return embedURL, nil
+		case "putlockerr.co":
+			embedURL, err := PutlockerrIo(url)
+			if err != nil {
+				log.Println("putlockerr.co:", err)
+				continue
+			}
+			return embedURL, nil
 		}
 	}
 
