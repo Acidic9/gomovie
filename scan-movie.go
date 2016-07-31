@@ -34,7 +34,7 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			fmt.Println(domain)
-			return strings.Replace(embedURL, `\`, "", -1), nil
+			return embedURL, nil
 		}
 	}
 
@@ -51,7 +51,7 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			fmt.Println(domain)
-			return strings.Replace(embedURL, `\`, "", -1), nil
+			return embedURL, nil
 		case "putlockerr.io":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
@@ -62,7 +62,7 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			fmt.Println(domain)
-			return strings.Replace(embedURL, `\`, "", -1), nil
+			return embedURL, nil
 		case "putlockerr.co":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
@@ -73,7 +73,7 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			fmt.Println(domain)
-			return strings.Replace(embedURL, `\`, "", -1), nil
+			return embedURL, nil
 		}
 	}
 
@@ -141,7 +141,7 @@ func PutlockerIs(url string) (string, error) {
 		return "", err
 	}
 
-	return DecryptPutlocker(embedURL), nil
+	return strings.Replace(DecryptPutlocker(embedURL), `\`, "", -1), nil
 }
 
 // PutlockerhdCo returns the url of the embedded video in
@@ -172,7 +172,8 @@ func PutlockerrIo(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return StringBetween(strings.ToLower(string(body)), `<iframe src="`, `"`)
+	embedURL, err := StringBetween(strings.ToLower(string(body)), `<iframe src="`, `"`)
+	return strings.Replace(embedURL, `\`, "", -1), err
 }
 
 // WatchfreeTo returns the url of the embedded video in
@@ -189,7 +190,8 @@ func WatchfreeTo(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return StringBetween(strings.ToLower(string(body)), `var locations = ["`, `"`)
+	embedURL, err := StringBetween(strings.ToLower(string(body)), `var locations = ["`, `"`)
+	return strings.Replace(embedURL, `\`, "", -1), err
 }
 
 // googleSearch searches a query to google.com and returns all
