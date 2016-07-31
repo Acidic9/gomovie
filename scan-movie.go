@@ -15,9 +15,9 @@ func GetEmbedURL(title string) (string, error) {
 		return "", errors.New("The title argument must not be empty")
 	}
 
-	domainBlacklist := []string{"videoweed.es",""}
+	domainBlacklist := []string{"videoweed.es"}
 
-	sites, err := googleSearch("Watch " + title + " Movie Online")
+	sites, err := googleSearch("Watch " + title + " Online Putlocker")
 	if err != nil {
 		return "", err
 	}
