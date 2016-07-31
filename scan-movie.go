@@ -15,66 +15,78 @@ func GetEmbedURL(title string) (string, error) {
 		return "", errors.New("The title argument must not be empty")
 	}
 
+	domainBlacklist := []string{"videoweed.es",""}
+
 	sites, err := googleSearch("Watch " + title + " Movie Online")
 	if err != nil {
 		return "", err
 	}
-
 	for _, url := range sites {
-		splittedDomain := strings.Split(url, `//`)
-		if len(splittedDomain) > 1 {
-			splittedDomain = strings.Split(splittedDomain[1], `/`)
-		}
-		splittedDomain = strings.Split(splittedDomain[0], `.`)
-		domain := splittedDomain[len(splittedDomain)-2] + `.` + splittedDomain[len(splittedDomain)-1]
+		domain := DomainFromURL(url)
 		if strings.ToLower(domain) == "watchfree.to" {
 			embedURL, err := WatchfreeTo(url)
 			if err != nil {
 				log.Println("watchfree.to:", err)
 				continue
 			}
+			if checkBlacklist(domainBlacklist, embedURL) {
+				log.Println("Blacklisted Domain", embedURL)
+				continue
+			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return strings.Replace(embedURL, `\`, "", -1), nil
 		}
 	}
 
 	for _, url := range sites {
-		splittedDomain := strings.Split(url, `//`)
-		if len(splittedDomain) > 1 {
-			splittedDomain = strings.Split(splittedDomain[1], `/`)
-		}
-		splittedDomain = strings.Split(splittedDomain[0], `.`)
-		if len(splittedDomain) < 2 {
-			log.Println("Domain error", splittedDomain)
-			return "", errors.New("Domain error")
-		}
-		domain := splittedDomain[len(splittedDomain)-2] + `.` + splittedDomain[len(splittedDomain)-1]
+		domain := DomainFromURL(url)
 		switch strings.ToLower(domain) {
 		case "putlocker.is":
 			embedURL, err := PutlockerIs(url)
 			if err != nil {
 				continue
 			}
+			if checkBlacklist(domainBlacklist, embedURL) {
+				log.Println("Blacklisted Domain", embedURL)
+				continue
+			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return strings.Replace(embedURL, `\`, "", -1), nil
 		case "putlockerr.io":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
 				continue
 			}
+			if checkBlacklist(domainBlacklist, embedURL) {
+				log.Println("Blacklisted Domain", embedURL)
+				continue
+			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return strings.Replace(embedURL, `\`, "", -1), nil
 		case "putlockerr.co":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
 				continue
 			}
+			if checkBlacklist(domainBlacklist, embedURL) {
+				log.Println("Blacklisted Domain", embedURL)
+				continue
+			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return strings.Replace(embedURL, `\`, "", -1), nil
 		}
 	}
 
 	return "", errors.New("Unable to find movie")
+}
+
+func checkBlacklist(blacklist []string, domain string) bool {
+	for _, url := range blacklist {
+		if strings.ToLower(url) == strings.ToLower(domain) {
+			return true
+		}
+	}
+	return false
 }
 
 func GetIMDBTitle(id string) (string, error) {
@@ -87,6 +99,18 @@ func GetIMDBTitle(id string) (string, error) {
 		return "", err
 	}
 	return StringBetween(strings.ToLower(string(body)), `<h1 itemprop="name" class="">`, `&nbsp;`)
+}
+
+func DomainFromURL(url string) string {
+	splittedDomain := strings.Split(url, `//`)
+	if len(splittedDomain) > 1 {
+		splittedDomain = strings.Split(splittedDomain[1], `/`)
+	}
+	splittedDomain = strings.Split(splittedDomain[0], `.`)
+	if len(splittedDomain) < 2 {
+		return splittedDomain[0]
+	}
+	return splittedDomain[len(splittedDomain)-2] + `.` + splittedDomain[len(splittedDomain)-1]
 }
 
 // PutlockerIs returns the url of the embedded video in
