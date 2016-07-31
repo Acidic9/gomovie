@@ -13,14 +13,14 @@ import (
 
 func GetEmbedURL(title string) ([]string, error) {
 	if title == "" {
-		return "", errors.New("The title argument must not be empty")
+		return []string{}, errors.New("The title argument must not be empty")
 	}
 
 	domainBlacklist := []string{"videoweed.es"}
 
 	sites, err := googleSearch("Watch " + title + " Online Putlocker", 3)
 	if err != nil {
-		return "", err
+		return []string{}, err
 	}
 	for _, url := range sites {
 		domain := DomainFromURL(url)
@@ -84,7 +84,7 @@ func GetEmbedURL(title string) ([]string, error) {
 		}
 	}
 
-	return "", errors.New("Unable to find movie")
+	return []string{}, errors.New("Unable to find movie")
 }
 
 func checkBlacklist(blacklist []string, domain string) bool {
@@ -187,15 +187,15 @@ func PutlockerrIo(url string) (string, error) {
 // the url provided.
 func WatchfreeTo(url string) ([]string, error) {
 	if url == "" {
-		return "", errors.New("The url argument must not be empty")
+		return []string{}, errors.New("The url argument must not be empty")
 	}
 	resp, err := http.Get(url)
 	if err != nil {
-		return "", err
+		return []string{}, err
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return []string{}, err
 	}
 	locations, err := StringBetween(strings.ToLower(string(body)), `var locations = [`, `];`)
 	locationSlice := strings.Split(locations, `,`)
