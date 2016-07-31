@@ -8,6 +8,7 @@ import (
 	"errors"
 	"log"
 	"fmt"
+	"strconv"
 )
 
 func GetEmbedURL(title string) (string, error) {
@@ -17,7 +18,7 @@ func GetEmbedURL(title string) (string, error) {
 
 	domainBlacklist := []string{"videoweed.es"}
 
-	sites, err := googleSearch("Watch " + title + " Online Putlocker")
+	sites, err := googleSearch("Watch " + title + " Online Putlocker", 3)
 	if err != nil {
 		return "", err
 	}
@@ -205,7 +206,7 @@ func googleSearch(query string, pages int) (results []string, err error) {
 	}
 
 	for i := 0; i <= 1; i++ {
-		resp, err := http.Get("https://www.google.com.au/search?q="+query+"&start="+i*10)
+		resp, err := http.Get("https://www.google.com.au/search?q="+query+"&start="+strconv.Itoa(i*10))
 		if err != nil {
 			return results, err
 		}
