@@ -243,8 +243,8 @@ func urlIsPutlocker(url string) bool {
 // both the provided start and end strings. An error will be returned if
 // str does not include both start and end as a substring.
 func StringBetween(str, start, end string) (string, error) {
-	if strings.Index(str, start) == -1 || strings.Index(str, end) == -1 {
-		return "", errors.New("String does not include start/end as substring.")
+	if strings.Index(str, start) == -1 && strings.Index(str, end) == -1 {
+		return str, errors.New("String does not include start/end as substring.")
 	}
 	str = str[len(start)+strings.Index(str, start):]
 	return str[:strings.Index(str, end)], nil
