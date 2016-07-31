@@ -54,6 +54,15 @@ func GetEmbedURL(title string) ([]string, error) {
 				continue
 			}
 			locations = append(locations, embedURL)
+		case "megashare.sc":
+			embedURL, err := PutlockerIs(url)
+			if err != nil {
+				continue
+			}
+			if checkBlacklist(domainBlacklist, embedURL) {
+				continue
+			}
+			locations = append(locations, embedURL)
 		case "putlockerr.io":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
@@ -132,6 +141,33 @@ func PutlockerIs(url string) (string, error) {
 	}
 
 	doitSection, err := StringBetween(string(body), `<div class="video">`, `<font color="red">`)
+	if err != nil {
+		return "", err
+	}
+	embedURL, err := StringBetween(doitSection, `document.write(doit('`, `'));`)
+	if err != nil {
+		return "", err
+	}
+	embedURL, err = StringBetween(strings.ToLower(DecryptPutlocker(embedURL)), `<iframe src="`, `"`)
+	return strings.Replace(embedURL, `\`, "", -1), err
+}
+
+// PutlockerIs returns the url of the embedded video in
+// the url provided.
+func MegashareSc(url string) (string, error) {
+	if url == "" {
+		return "", errors.New("The url argument must not be empty")
+	}
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	doitSection, err := StringBetween(string(body), `<td align=center valign=top width="425">`, `<td width="20%" align="left">`)
 	if err != nil {
 		return "", err
 	}
