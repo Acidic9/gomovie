@@ -56,7 +56,7 @@ func GetEmbedURL(title string) ([]string, error) {
 			}
 			locations = append(locations, embedURL)
 		case "megashare.sc":
-			embedURL, err := PutlockerIs(url)
+			embedURL, err := MegashareSc(url)
 			if err != nil {
 				log.Println("megashare.sc", err)
 				continue
