@@ -98,12 +98,16 @@ func PutlockerIs(url string) (string, error) {
 		return "", err
 	}
 
-	fmt.Printf("!%#v", string(body))
-
-	embedURL, err := StringBetween(strings.Replace(strings.Replace(string(body), "\r", "", -1), "\n", "", -1), `<div class="video"><script type="text/javascript">document.write(doit('`, `'));`)
+	doitSection, err := StringBetween(string(body), `<div class="video">`, `<font color="red">`)
 	if err != nil {
 		return "", err
 	}
+	embedURL, err := StringBetween(doitSection, `document.write(doit('`, `'));`)
+	if err != nil {
+		return "", err
+	}
+
+	fmt.Printf("!%#v", doitSection)
 
 	fmt.Println(embedURL)
 	return DecryptPutlocker(embedURL), nil
