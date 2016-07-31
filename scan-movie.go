@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"errors"
 	"strconv"
+	"log"
 )
 
 func GetEmbedURL(title string) ([]string, error) {
@@ -57,6 +58,7 @@ func GetEmbedURL(title string) ([]string, error) {
 		case "megashare.sc":
 			embedURL, err := PutlockerIs(url)
 			if err != nil {
+				log.Println("megashare.sc", err)
 				continue
 			}
 			if checkBlacklist(domainBlacklist, embedURL) {
