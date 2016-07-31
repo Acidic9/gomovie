@@ -140,8 +140,8 @@ func PutlockerIs(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	return strings.Replace(DecryptPutlocker(embedURL), `\`, "", -1), nil
+	embedURL, err = StringBetween(strings.ToLower(DecryptPutlocker(embedURL)), `<iframe src="`, `"`)
+	return strings.Replace(embedURL, `\`, "", -1), err
 }
 
 // PutlockerhdCo returns the url of the embedded video in
