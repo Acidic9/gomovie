@@ -100,10 +100,12 @@ func PutlockerIs(url string) (string, error) {
 
 	doitSection, err := StringBetween(string(body), `<div class="video">`, `<font color="red">`)
 	if err != nil {
+		panic(err)
 		return "", err
 	}
 	embedURL, err := StringBetween(doitSection, `document.write(doit('`, `'));`)
 	if err != nil {
+		panic(err)
 		return "", err
 	}
 
