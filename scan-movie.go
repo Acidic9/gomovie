@@ -74,6 +74,18 @@ func GetEmbedURL(title string) (string, error) {
 	return "", errors.New("Unable to find movie")
 }
 
+func GetIMDBTitle(id string) (string, error) {
+	resp, err := http.Get("http://www.imdb.com/title/" + id)
+	if err != nil {
+		return "", err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return StringBetween(strings.ToLower(string(body)), `<h1 itemprop="name" class="">`, `&nbsp;`)
+}
+
 // PutlockerIs returns the url of the embedded video in
 // the url provided.
 func PutlockerIs(url string) (string, error) {
