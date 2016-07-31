@@ -199,60 +199,35 @@ func WatchfreeTo(url string) (string, error) {
 func googleSearch(query string, pages int) (results []string, err error) {
 	results = make([]string, 0, 10)
 	query = strings.Replace(query, " ", "%20", -1)
-	resp, err := http.Get("https://www.google.com.au/search?q="+query)
-	if err != nil {
-		return results, err
+
+	if pages == 0 {
+		pages = 1
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return results, err
-	}
-
-	sites := strings.Split(string(body), `class="g"`)
-	for _, site := range sites {
-		if strings.Index(site, `<a href="`) != -1 {
-			site = site[strings.Index(site, `<a href="`) + len(`<a href="`):]
-			if site[:len(`/url?q=`)] == `/url?q=` {
-				if strings.Index(site, `">`) != -1 {
-					site = site[len(`/url?q=`):strings.Index(site, `">`)]
-					if strings.Index(site, `&`) != -1 {
-						site = site[:strings.Index(site, `&`)]
-						site, err := url.QueryUnescape(site)
-						if err != nil {
-							return results, err
-						}
-						results = append(results, site)
-					}
-				}
-			}
+	for i := 0; i <= 1; i++ {
+		resp, err := http.Get("https://www.google.com.au/search?q="+query+"&start="+i*10)
+		if err != nil {
+			return results, err
 		}
-	}
-
-	resp, err = http.Get("https://www.google.com.au/search?q="+query+"&start=10")
-	if err != nil {
-		return results, err
-	}
-
-	body, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return results, err
-	}
-
-	sites = strings.Split(string(body), `class="g"`)
-	for _, site := range sites {
-		if strings.Index(site, `<a href="`) != -1 {
-			site = site[strings.Index(site, `<a href="`) + len(`<a href="`):]
-			if site[:len(`/url?q=`)] == `/url?q=` {
-				if strings.Index(site, `">`) != -1 {
-					site = site[len(`/url?q=`):strings.Index(site, `">`)]
-					if strings.Index(site, `&`) != -1 {
-						site = site[:strings.Index(site, `&`)]
-						site, err := url.QueryUnescape(site)
-						if err != nil {
-							return results, err
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return results, err
+		}
+		sites := strings.Split(string(body), `class="g"`)
+		for _, site := range sites {
+			if strings.Index(site, `<a href="`) != -1 {
+				site = site[strings.Index(site, `<a href="`) + len(`<a href="`):]
+				if site[:len(`/url?q=`)] == `/url?q=` {
+					if strings.Index(site, `">`) != -1 {
+						site = site[len(`/url?q=`):strings.Index(site, `">`)]
+						if strings.Index(site, `&`) != -1 {
+							site = site[:strings.Index(site, `&`)]
+							site, err := url.QueryUnescape(site)
+							if err != nil {
+								return results, err
+							}
+							results = append(results, site)
 						}
-						results = append(results, site)
 					}
 				}
 			}
