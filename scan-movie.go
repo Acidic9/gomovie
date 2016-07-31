@@ -81,6 +81,7 @@ func GetEmbedURL(title string) (string, error) {
 }
 
 func checkBlacklist(blacklist []string, domain string) bool {
+	fmt.Println("--- ORI", domain)
 	domain = DomainFromURL(domain)
 	for _, url := range blacklist {
 		fmt.Println("--- URL", strings.ToLower(url))
