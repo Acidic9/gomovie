@@ -103,13 +103,14 @@ func PutlockerIs(url string) (string, error) {
 		panic(err)
 		return "", err
 	}
+
+	fmt.Printf("!%#v", doitSection)
+
 	embedURL, err := StringBetween(doitSection, `document.write(doit('`, `'));`)
 	if err != nil {
 		panic(err)
 		return "", err
 	}
-
-	fmt.Printf("!%#v", doitSection)
 
 	fmt.Println(embedURL)
 	return DecryptPutlocker(embedURL), nil
