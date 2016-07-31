@@ -7,7 +7,6 @@ import (
 	"net/url"
 	"errors"
 	"log"
-	"fmt"
 )
 
 func GetEmbedURL(title string) (string, error) {
@@ -38,9 +37,7 @@ func GetEmbedURL(title string) (string, error) {
 		if len(splittedDomain) > 1 {
 			splittedDomain = strings.Split(splittedDomain[1], `/`)
 		}
-		fmt.Println(splittedDomain)
 		splittedDomain = strings.Split(splittedDomain[0], `.`)
-		fmt.Println(splittedDomain)
 		if len(splittedDomain) < 2 {
 			log.Println("Domain error", splittedDomain)
 			return "", errors.New("Domain error")
@@ -100,12 +97,10 @@ func PutlockerIs(url string) (string, error) {
 
 	doitSection, err := StringBetween(string(body), `<div class="video">`, `<font color="red">`)
 	if err != nil {
-		panic(err)
 		return "", err
 	}
 	embedURL, err := StringBetween(doitSection, `document.write(doit('`, `'));`)
 	if err != nil {
-		panic(err)
 		return "", err
 	}
 
