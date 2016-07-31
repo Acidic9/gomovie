@@ -11,7 +11,7 @@ import (
 )
 
 func GetEmbedURL(title string) (string, error) {
-	sites, err := googleSearch("Watch " + title + " Online")
+	sites, err := googleSearch("Watch " + title + " Movie Online")
 	if err != nil {
 		return "", err
 	}
@@ -103,16 +103,12 @@ func PutlockerIs(url string) (string, error) {
 		panic(err)
 		return "", err
 	}
-
-	fmt.Printf("!%#v", doitSection)
-
 	embedURL, err := StringBetween(doitSection, `document.write(doit('`, `'));`)
 	if err != nil {
 		panic(err)
 		return "", err
 	}
 
-	fmt.Println(embedURL)
 	return DecryptPutlocker(embedURL), nil
 }
 
