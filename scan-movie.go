@@ -169,7 +169,7 @@ func MegashareSc(url string) (string, error) {
 		return "", err
 	}
 
-	doitSection, err := StringBetween(string(body), `<td align=center valign=top width="425">`, `<td width="20%" align="left">`)
+	doitSection, err := StringBetween(string(body), `<body bgcolor="#000000">`, `</a></b></div>`)
 	if err != nil {
 		return "", err
 	}
