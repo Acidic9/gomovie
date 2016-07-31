@@ -58,7 +58,7 @@ func GetEmbedURL(title string) ([]string, error) {
 		case "megashare.sc":
 			embedURL, err := MegashareSc(url)
 			if err != nil {
-				log.Println("megashare.sc", err)
+				log.Println(url, err)
 				continue
 			}
 			if checkBlacklist(domainBlacklist, embedURL) {
