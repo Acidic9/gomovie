@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"errors"
 	"log"
+	"fmt"
 )
 
 func GetEmbedURL(title string) (string, error) {
@@ -28,6 +29,7 @@ func GetEmbedURL(title string) (string, error) {
 				log.Println("watchfree.to:", err)
 				continue
 			}
+			fmt.Println(domain)
 			return embedURL, nil
 		}
 	}
@@ -47,23 +49,23 @@ func GetEmbedURL(title string) (string, error) {
 		case "putlocker.is":
 			embedURL, err := PutlockerIs(url)
 			if err != nil {
-				log.Println("putlocker.is:", err)
 				continue
 			}
+			fmt.Println(domain)
 			return embedURL, nil
 		case "putlockerr.io":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
-				log.Println("putlockerr.io:", err)
 				continue
 			}
+			fmt.Println(domain)
 			return embedURL, nil
 		case "putlockerr.co":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
-				log.Println("putlockerr.co:", err)
 				continue
 			}
+			fmt.Println(domain)
 			return embedURL, nil
 		}
 	}
