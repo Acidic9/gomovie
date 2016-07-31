@@ -11,6 +11,10 @@ import (
 )
 
 func GetEmbedURL(title string) (string, error) {
+	if title == "" {
+		return "", errors.New("The title argument must not be empty")
+	}
+
 	sites, err := googleSearch("Watch " + title + " Movie Online")
 	if err != nil {
 		return "", err
@@ -88,6 +92,9 @@ func GetIMDBTitle(id string) (string, error) {
 // PutlockerIs returns the url of the embedded video in
 // the url provided.
 func PutlockerIs(url string) (string, error) {
+	if url == "" {
+		return "", errors.New("The url argument must not be empty")
+	}
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
@@ -126,6 +133,9 @@ func PutlockerIs(url string) (string, error) {
 // PutlockerIo returns the url of the embedded video in
 // the url provided.
 func PutlockerrIo(url string) (string, error) {
+	if url == "" {
+		return "", errors.New("The url argument must not be empty")
+	}
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
@@ -140,6 +150,9 @@ func PutlockerrIo(url string) (string, error) {
 // WatchfreeTo returns the url of the embedded video in
 // the url provided.
 func WatchfreeTo(url string) (string, error) {
+	if url == "" {
+		return "", errors.New("The url argument must not be empty")
+	}
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
