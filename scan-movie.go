@@ -168,12 +168,7 @@ func MegashareSc(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	doitSection, err := StringBetween(string(body), `ge=javascript>document.write(doit('`, `'))`)
-	if err != nil {
-		return "", err
-	}
-	embedURL, err := StringBetween(doitSection, `document.write(doit('`, `'));`)
+	embedURL, err := StringBetween(string(body), `document.write(doit('`, `'));`)
 	if err != nil {
 		return "", err
 	}
