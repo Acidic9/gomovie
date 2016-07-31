@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/url"
 	"errors"
-	"log"
 	"strconv"
 )
 
@@ -28,13 +27,11 @@ func GetEmbedURL(title string) ([]string, error) {
 		if strings.ToLower(domain) == "watchfree.to" {
 			locations, err := WatchfreeTo(url)
 			if err != nil {
-				log.Println("watchfree.to:", err)
 				continue
 			}
 			for k, location := range locations {
 				if checkBlacklist(domainBlacklist, location) {
 					locations = append(locations[:k], locations[k+1:]...)
-					log.Println("Blacklisted Domain", location)
 					continue
 				}
 			}
@@ -54,7 +51,6 @@ func GetEmbedURL(title string) ([]string, error) {
 				continue
 			}
 			if checkBlacklist(domainBlacklist, embedURL) {
-				log.Println("Blacklisted Domain", embedURL)
 				continue
 			}
 			locations = append(locations, embedURL)
@@ -64,7 +60,6 @@ func GetEmbedURL(title string) ([]string, error) {
 				continue
 			}
 			if checkBlacklist(domainBlacklist, embedURL) {
-				log.Println("Blacklisted Domain", embedURL)
 				continue
 			}
 			locations = append(locations, embedURL)
@@ -74,7 +69,6 @@ func GetEmbedURL(title string) ([]string, error) {
 				continue
 			}
 			if checkBlacklist(domainBlacklist, embedURL) {
-				log.Println("Blacklisted Domain", embedURL)
 				continue
 			}
 			locations = append(locations, embedURL)
