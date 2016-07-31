@@ -18,9 +18,11 @@ func GetEmbedURL(title string) ([]string, error) {
 
 	domainBlacklist := []string{"videoweed.es"}
 
+	locations := make([]string, 0, 32)
+
 	sites, err := googleSearch("Watch " + title + " Online Putlocker", 3)
 	if err != nil {
-		return []string{}, err
+		return locations, err
 	}
 	for _, url := range sites {
 		domain := DomainFromURL(url)
@@ -40,8 +42,7 @@ func GetEmbedURL(title string) ([]string, error) {
 			if len(locations) <= 0 {
 				continue
 			}
-			fmt.Println(domain)
-			return locations, nil
+			locations = append(locations, locations...)
 		}
 	}
 
@@ -57,8 +58,7 @@ func GetEmbedURL(title string) ([]string, error) {
 				log.Println("Blacklisted Domain", embedURL)
 				continue
 			}
-			fmt.Println(domain)
-			return []string{embedURL}, nil
+			locations = append(locations, embedURL)
 		case "putlockerr.io":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
@@ -68,8 +68,7 @@ func GetEmbedURL(title string) ([]string, error) {
 				log.Println("Blacklisted Domain", embedURL)
 				continue
 			}
-			fmt.Println(domain)
-			return []string{embedURL}, nil
+			locations = append(locations, embedURL)
 		case "putlockerr.co":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
@@ -79,12 +78,15 @@ func GetEmbedURL(title string) ([]string, error) {
 				log.Println("Blacklisted Domain", embedURL)
 				continue
 			}
-			fmt.Println(domain)
-			return []string{embedURL}, nil
+			locations = append(locations, embedURL)
 		}
 	}
 
-	return []string{}, errors.New("Unable to find movie")
+	if len(locations) <= 0 {
+		return locations, errors.New("Unable to find movie")
+	}
+
+	return locations, nil
 }
 
 func checkBlacklist(blacklist []string, domain string) bool {
