@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func GetEmbedURL(title string) (string, error) {
+func GetEmbedURL(title string) ([]string, error) {
 	if title == "" {
 		return "", errors.New("The title argument must not be empty")
 	}
@@ -25,17 +25,23 @@ func GetEmbedURL(title string) (string, error) {
 	for _, url := range sites {
 		domain := DomainFromURL(url)
 		if strings.ToLower(domain) == "watchfree.to" {
-			embedURL, err := WatchfreeTo(url)
+			locations, err := WatchfreeTo(url)
 			if err != nil {
 				log.Println("watchfree.to:", err)
 				continue
 			}
-			if checkBlacklist(domainBlacklist, embedURL) {
-				log.Println("Blacklisted Domain", embedURL)
+			for k, location := range locations {
+				if checkBlacklist(domainBlacklist, location) {
+					locations = append(locations[:k], locations[k+1:]...)
+					log.Println("Blacklisted Domain", location)
+					continue
+				}
+			}
+			if len(locations) <= 0 {
 				continue
 			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return locations, nil
 		}
 	}
 
@@ -52,7 +58,7 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return []string{embedURL}, nil
 		case "putlockerr.io":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
@@ -63,7 +69,7 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return []string{embedURL}, nil
 		case "putlockerr.co":
 			embedURL, err := PutlockerrIo(url)
 			if err != nil {
@@ -74,7 +80,7 @@ func GetEmbedURL(title string) (string, error) {
 				continue
 			}
 			fmt.Println(domain)
-			return embedURL, nil
+			return []string{embedURL}, nil
 		}
 	}
 
@@ -179,7 +185,7 @@ func PutlockerrIo(url string) (string, error) {
 
 // WatchfreeTo returns the url of the embedded video in
 // the url provided.
-func WatchfreeTo(url string) (string, error) {
+func WatchfreeTo(url string) ([]string, error) {
 	if url == "" {
 		return "", errors.New("The url argument must not be empty")
 	}
@@ -191,8 +197,12 @@ func WatchfreeTo(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	embedURL, err := StringBetween(strings.ToLower(string(body)), `var locations = ["`, `"`)
-	return strings.Replace(embedURL, `\`, "", -1), err
+	locations, err := StringBetween(strings.ToLower(string(body)), `var locations = [`, `];`)
+	locationSlice := strings.Split(locations, `,`)
+	for i, loc := range locationSlice {
+		locationSlice[i] = strings.Replace(strings.Replace(loc, `\`, "", -1), `"`, "", -1)
+	}
+	return locationSlice, nil
 }
 
 // googleSearch searches a query to google.com and returns all
